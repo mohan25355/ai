@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
@@ -301,7 +302,7 @@ export default function SubmitComplaintPage() {
                   />
 
                   <div className="space-y-2">
-                    <FormLabel>Photo Evidence (Optional)</FormLabel>
+                    <Label>Photo Evidence (Optional)</Label>
                     <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
                       {photoUrl ? (
                         <div className="space-y-4">
