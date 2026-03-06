@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Label } from '@/components/ui/label';
 import { StatusBadge } from '@/components/common/StatusBadge';
 import { PriorityBadge } from '@/components/common/PriorityBadge';
 import { AIStatusBanner } from '@/components/common/AIStatusBanner';
@@ -364,9 +365,9 @@ export default function ComplaintDetailPage() {
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Status</label>
+                <Label htmlFor="status-select">Status</Label>
                 <Select value={selectedStatus} onValueChange={(value) => setSelectedStatus(value as ComplaintStatus)}>
-                  <SelectTrigger>
+                  <SelectTrigger id="status-select">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -380,12 +381,12 @@ export default function ComplaintDetailPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Assigned Department</label>
+                <Label htmlFor="department-select">Assigned Department</Label>
                 <Select 
                   value={selectedDepartment?.toString() || ''} 
                   onValueChange={(value) => setSelectedDepartment(value ? Number(value) : null)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id="department-select">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
                   <SelectContent>
