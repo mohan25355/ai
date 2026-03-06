@@ -171,23 +171,25 @@ export default function SubmitComplaintPage() {
 
       // Trigger AI analysis in background
       setAnalyzing(true);
-      supabase.functions
-        .invoke('analyze-complaint', {
-          body: {
-            complaintId: complaint.id,
-            title: data.title,
-            description: data.description,
-            location: data.location
-          }
-        })
-        .then(({ error }) => {
-          if (error) {
-            console.error('AI analysis error:', error);
-          }
-        })
-        .finally(() => {
-          setAnalyzing(false);
-        });
+      
+      // Import AI service
+      const { triggerAIAnalysis } = await import('@/db/ai-service');
+      
+      triggerAIAnalysis(
+        complaint.id,
+        data.title,
+        data.description,
+        data.location
+      ).then(({ success, error }) => {
+        if (!success) {
+          console.error('AI analysis failed:', error);
+          toast.info('Complaint submitted, but AI analysis is pending. Please check back later.');
+        } else {
+          toast.success('AI analysis completed successfully!');
+        }
+      }).finally(() => {
+        setAnalyzing(false);
+      });
 
       // Navigate to track page with tracking ID
       navigate('/track', { state: { trackingId: complaint.tracking_id } });

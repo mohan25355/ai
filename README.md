@@ -1,91 +1,135 @@
-# Welcome to Your Miaoda Project
+# CivicMind AI - AI-Powered Governance Intelligence Platform
 
-## Project Info
+An intelligent platform for India that enables citizens to anonymously report public infrastructure issues while allowing government administrators to analyze, prioritize, and resolve complaints using artificial intelligence.
 
-## Project Directory
+## Features
 
-```
-├── README.md # Documentation
-├── components.json # Component library configuration
-├── index.html # Entry file
-├── package.json # Package management
-├── postcss.config.js # PostCSS configuration
-├── public # Static resources directory
-│   ├── favicon.png # Icon
-│   └── images # Image resources
-├── src # Source code directory
-│   ├── App.tsx # Entry file
-│   ├── components # Components directory
-│   ├── context # Context directory
-│   ├── db # Database configuration directory
-│   ├── hooks # Common hooks directory
-│   ├── index.css # Global styles
-│   ├── layout # Layout directory
-│   ├── lib # Utility library directory
-│   ├── main.tsx # Entry file
-│   ├── routes.tsx # Routing configuration
-│   ├── pages # Pages directory
-│   ├── services # Database interaction directory
-│   ├── types # Type definitions directory
-├── tsconfig.app.json # TypeScript frontend configuration file
-├── tsconfig.json # TypeScript configuration file
-├── tsconfig.node.json # TypeScript Node.js configuration file
-└── vite.config.ts # Vite configuration file
-```
+### Citizen Portal
+- **Anonymous Complaint Submission**: Report issues without revealing identity
+- **Photo Upload**: Attach evidence with automatic compression
+- **Real-time Tracking**: Track complaint status using unique tracking ID
+- **AI-Powered Analysis**: Automatic sentiment analysis, priority detection, and fraud detection
 
-## Tech Stack
+### Admin Portal
+- **Dashboard**: Overview of complaints with key statistics
+- **Complaints Management**: View, filter, and update complaints
+- **AI Analysis Dashboard**: Visualize complaint patterns with charts
+- **Audit Verification Queue**: Review suspicious complaints flagged by AI
+- **Manual Re-analysis**: Trigger AI analysis on-demand for any complaint
 
-Vite, TypeScript, React, Supabase
+### AI Integration
+- **AWS Comprehend**: Sentiment analysis
+- **OpenAI GPT**: Fraud detection and solution recommendations
+- **Google Gemini**: Root cause analysis and cost estimation
 
-## Development Guidelines
+## Setup Instructions
 
-### How to edit code locally?
+### 1. Prerequisites
+- Node.js 18+ and pnpm installed
+- Supabase account
+- API keys for AI services (optional but recommended)
 
-You can choose [VSCode](https://code.visualstudio.com/Download) or any IDE you prefer. The only requirement is to have Node.js and npm installed.
+### 2. Environment Variables
+The following secrets are already configured in Supabase Edge Functions:
+- `AWS_ACCESS_KEY_ID` - AWS Comprehend access key
+- `AWS_SECRET_ACCESS_KEY` - AWS Comprehend secret key
+- `AWS_REGION` - AWS region (e.g., us-east-1, ap-south-1)
+- `OPENAI_API_KEY` - OpenAI API key
+- `GOOGLE_GEMINI_API_KEY` - Google Gemini API key
 
-### Environment Requirements
+### 3. Database Setup
+The database is already initialized with:
+- Complaints table with AI analysis fields
+- Categories (Road Damage, Water Supply, Electricity, Sanitation, Public Safety)
+- Departments (Public Works, Water Supply, Electricity Board, Sanitation, Police)
+- Storage bucket for complaint images
+- Row Level Security policies
 
-```
-# Node.js ≥ 20
-# npm ≥ 10
-Example:
-# node -v   # v20.18.3
-# npm -v    # 10.8.2
-```
+### 4. First Admin User
+1. Go to `/login`
+2. Click "Sign Up" tab
+3. Create an account with username and password
+4. The first user is automatically assigned admin role
+5. Subsequent users will have regular user role (admins can change roles)
 
-### Installing Node.js on Windows
+### 5. Using the Platform
 
-```
-# Step 1: Visit the Node.js official website: https://nodejs.org/, click download. The website will automatically suggest a suitable version (32-bit or 64-bit) for your system.
-# Step 2: Run the installer: Double-click the downloaded installer to run it.
-# Step 3: Complete the installation: Follow the installation wizard to complete the process.
-# Step 4: Verify installation: Open Command Prompt (cmd) or your IDE terminal, and type `node -v` and `npm -v` to check if Node.js and npm are installed correctly.
-```
+#### As a Citizen:
+1. Visit the homepage
+2. Click "Submit a Complaint"
+3. Fill in details (title, description, category, location)
+4. Optionally upload a photo (max 1MB, auto-compressed)
+5. Submit and receive a tracking ID
+6. Use "Track Your Complaint" to check status
 
-### Installing Node.js on macOS
+#### As an Admin:
+1. Login at `/login`
+2. Access admin dashboard at `/admin`
+3. View all complaints at `/admin/complaints`
+4. Click on any complaint to see AI analysis
+5. Update status and assign departments
+6. Review suspicious complaints at `/admin/audit`
+7. View analytics at `/admin/analytics`
 
-```
-# Step 1: Using Homebrew (Recommended method): Open Terminal. Type the command `brew install node` and press Enter. If Homebrew is not installed, you need to install it first by running the following command in Terminal:
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-Alternatively, use the official installer: Visit the Node.js official website. Download the macOS .pkg installer. Open the downloaded .pkg file and follow the prompts to complete the installation.
-# Step 2: Verify installation: Open Command Prompt (cmd) or your IDE terminal, and type `node -v` and `npm -v` to check if Node.js and npm are installed correctly.
-```
+## AI Analysis Features
 
-### After installation, follow these steps:
+### Automatic Analysis
+When a complaint is submitted, the AI automatically:
+- Analyzes sentiment (POSITIVE, NEGATIVE, NEUTRAL)
+- Detects fraud probability (0-100%)
+- Assigns priority (low, medium, high)
+- Recommends department
+- Suggests solution
+- Identifies root cause
+- Estimates resolution time and cost
 
-```
-# Step 1: Download the code package
-# Step 2: Extract the code package
-# Step 3: Open the code package with your IDE and navigate into the code directory
-# Step 4: In the IDE terminal, run the command to install dependencies: npm i
-# Step 5: In the IDE terminal, run the command to start the development server: npm run dev -- --host 127.0.0.1
-# Step 6: if step 5 failed, try this command to start the development server: npx vite --host 127.0.0.1
-```
+### Fraud Detection
+Complaints with fraud probability ≥70% are:
+- Automatically flagged
+- Sent to audit verification queue
+- Marked as "Under Review"
+- Require manual admin approval
 
-### How to develop backend services?
+### Fallback Mechanism
+If AI services are unavailable, the system uses intelligent fallback algorithms based on:
+- Keyword analysis
+- Pattern matching
+- Historical data
+- Rule-based classification
 
-Configure environment variables and install relevant dependencies.If you need to use a database, please use the official version of Supabase.
+## Technology Stack
 
-## Learn More
+- **Frontend**: React + TypeScript + Vite
+- **UI Components**: shadcn/ui + Tailwind CSS
+- **Backend**: Supabase (PostgreSQL + Edge Functions)
+- **Authentication**: Supabase Auth (username/password)
+- **Storage**: Supabase Storage
+- **AI Services**: AWS Comprehend, OpenAI, Google Gemini
+- **Charts**: Recharts
 
-You can also check the help documentation: Download and Building the app（ [https://intl.cloud.baidu.com/en/doc/MIAODA/s/download-and-building-the-app-en](https://intl.cloud.baidu.com/en/doc/MIAODA/s/download-and-building-the-app-en)）to learn more detailed content.
+## Color Scheme
+
+The design uses Indian governance-inspired colors:
+- **Primary (Blue)**: Trust, technology, professionalism
+- **Secondary (Green)**: Growth, sustainability, progress
+- **Accent (Saffron)**: Energy, courage, sacrifice
+
+## Security Features
+
+- Anonymous complaint submission (no personal data required)
+- Admin authentication with role-based access
+- Row Level Security on all database tables
+- Secure image upload with validation
+- API keys stored as Supabase secrets
+- CORS protection on Edge Functions
+
+## Support
+
+For issues or questions:
+1. Check the admin dashboard for system status
+2. Review complaint tracking for status updates
+3. Contact system administrator for access issues
+
+## License
+
+© 2026 CivicMind AI. All rights reserved.

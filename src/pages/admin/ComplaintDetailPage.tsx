@@ -7,9 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { StatusBadge } from '@/components/common/StatusBadge';
 import { PriorityBadge } from '@/components/common/PriorityBadge';
+import { AIStatusBanner } from '@/components/common/AIStatusBanner';
 import { getComplaintById, updateComplaint, deleteComplaint, getDepartments } from '@/db/api';
+import { triggerAIAnalysis } from '@/db/ai-service';
 import type { ComplaintWithDetails, Department, ComplaintStatus } from '@/types';
-import { ArrowLeft, MapPin, Calendar, Building2, Clock, DollarSign, AlertCircle, Trash2, Save } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, Building2, Clock, DollarSign, AlertCircle, Trash2, Save, Brain } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -32,6 +34,7 @@ export default function ComplaintDetailPage() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<ComplaintStatus>('pending');
   const [selectedDepartment, setSelectedDepartment] = useState<number | null>(null);
 
@@ -102,6 +105,32 @@ export default function ComplaintDetailPage() {
     }
   }
 
+  async function handleReanalyze() {
+    if (!id || !complaint) return;
+    setAnalyzing(true);
+    try {
+      const { success, error } = await triggerAIAnalysis(
+        id,
+        complaint.title,
+        complaint.description,
+        complaint.location
+      );
+
+      if (success) {
+        toast.success('AI analysis completed successfully');
+        // Reload complaint to show updated analysis
+        setTimeout(() => loadComplaint(), 2000);
+      } else {
+        toast.error('AI analysis failed: ' + (error?.message || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Reanalyze error:', error);
+      toast.error('Failed to trigger AI analysis');
+    } finally {
+      setAnalyzing(false);
+    }
+  }
+
   if (loading) {
     return (
       <AdminLayout>
@@ -134,27 +163,43 @@ export default function ComplaintDetailPage() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Complaints
           </Button>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Complaint</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete this complaint? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleReanalyze}
+              disabled={analyzing}
+            >
+              <Brain className="h-4 w-4 mr-2" />
+              {analyzing ? 'Analyzing...' : 'Re-analyze with AI'}
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" size="sm">
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Complaint</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete this complaint? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
+
+        <AIStatusBanner 
+          aiAnalyzed={complaint.ai_analyzed} 
+          fraudProbability={complaint.fraud_probability}
+        />
 
         <Card>
           <CardHeader>

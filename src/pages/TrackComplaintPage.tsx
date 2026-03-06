@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { StatusBadge } from '@/components/common/StatusBadge';
 import { PriorityBadge } from '@/components/common/PriorityBadge';
+import { AIStatusBanner } from '@/components/common/AIStatusBanner';
 import { getComplaintByTrackingId } from '@/db/api';
 import type { ComplaintWithDetails } from '@/types';
 import { Search, Loader2, MapPin, Calendar, Building2, Clock, DollarSign, AlertCircle } from 'lucide-react';
@@ -89,6 +90,11 @@ export default function TrackComplaintPage() {
 
           {complaint && (
             <div className="space-y-6">
+              <AIStatusBanner 
+                aiAnalyzed={complaint.ai_analyzed} 
+                fraudProbability={complaint.fraud_probability}
+              />
+
               <Card>
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -230,22 +236,6 @@ export default function TrackComplaintPage() {
                   )}
                 </CardContent>
               </Card>
-
-              {complaint.fraud_probability !== null && complaint.fraud_probability >= 0.7 && (
-                <Card className="border-warning bg-warning/5">
-                  <CardContent className="pt-6">
-                    <div className="flex items-start gap-3">
-                      <AlertCircle className="h-5 w-5 text-warning mt-0.5" />
-                      <div>
-                        <div className="font-medium">Under Review</div>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          This complaint has been flagged for verification and is currently under review by our audit team.
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
             </div>
           )}
 
