@@ -8,6 +8,7 @@ import ComplaintsListPage from './pages/admin/ComplaintsListPage';
 import ComplaintDetailPage from './pages/admin/ComplaintDetailPage';
 import AnalyticsDashboardPage from './pages/admin/AnalyticsDashboardPage';
 import AuditVerificationPage from './pages/admin/AuditVerificationPage';
+import UserManagementPage from './pages/admin/UserManagementPage';
 
 interface RouteConfig {
   name: string;
@@ -61,6 +62,11 @@ const routes: RouteConfig[] = [
     name: 'Audit Queue',
     path: '/admin/audit',
     element: <AuditVerificationPage />
+  },
+  {
+    name: 'User Management',
+    path: '/admin/users',
+    element: <UserManagementPage />
   }
 ];
 

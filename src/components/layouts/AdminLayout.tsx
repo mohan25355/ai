@@ -7,6 +7,7 @@ import {
   FileText, 
   BarChart3, 
   AlertTriangle, 
+  Users,
   LogOut, 
   Menu,
   Home
@@ -28,7 +29,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Complaints', path: '/admin/complaints', icon: FileText },
     { name: 'Analytics', path: '/admin/analytics', icon: BarChart3 },
-    { name: 'Audit Queue', path: '/admin/audit', icon: AlertTriangle }
+    { name: 'Audit Queue', path: '/admin/audit', icon: AlertTriangle },
+    { name: 'User Management', path: '/admin/users', icon: Users }
   ];
 
   const SidebarContent = () => (
