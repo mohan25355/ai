@@ -1,3 +1,7 @@
+# Welcome to Your Miaoda Project
+Miaoda Application Link URL
+    URL:https://medo.dev/projects/app-a2kfq7q072f5
+
 # CivicMind AI - AI-Powered Governance Intelligence Platform
 
 An intelligent platform for India that enables citizens to anonymously report public infrastructure issues while allowing government administrators to analyze, prioritize, and resolve complaints using artificial intelligence.
